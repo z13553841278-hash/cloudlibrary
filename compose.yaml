@@ -10,14 +10,14 @@ services:
       mysql:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/user_management?useSSL=false&allowPublicKeyRetrieval=true"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/book_management?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&useUnicode=true&autoReconnect=true&serverTimezone=Asia/Shanghai"
       SPRING_DATASOURCE_USERNAME: "root"
       SPRING_DATASOURCE_PASSWORD: "secret"
     networks:
       - app-network
 
   mysql:
-    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/mysql:8.0
+    image: mysql:8.0
     command: 
       - --default-authentication-plugin=caching_sha2_password
       - --character-set-server=utf8mb4
@@ -25,7 +25,7 @@ services:
       - --host-cache-size=0
     environment:
       MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: user_management
+      MYSQL_DATABASE: book_management
       MYSQL_DEFAULT_AUTHENTICATION_PLUGIN: caching_sha2_password
     ports:
       - "3307:3306"
