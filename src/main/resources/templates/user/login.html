@@ -1,0 +1,134 @@
+<!-- templates/login.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+    <title>云图书管理系统 - 登录</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-icons.css}">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .login-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h2 {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .login-header p {
+            color: #666;
+        }
+
+        .form-floating {
+            margin-bottom: 15px;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 10px;
+            font-weight: 600;
+        }
+
+        .alert {
+            margin-top: 20px;
+        }
+
+        .remember-me {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h2><i class="bi bi-book"></i> 云图书管理系统</h2>
+                <p>请输入您的账号和密码</p>
+            </div>
+
+            <!-- 错误提示 -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <!-- 登录表单 -->
+            <form th:action="@{/user/login}" method="post" th:object="${loginDTO}">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="userName" th:field="*{userName}" placeholder="请输入用户名"
+                        required>
+                    <label for="userName">
+                        <i class="bi bi-person"></i> 用户名
+                    </label>
+                </div>
+
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="请输入密码"
+                        required>
+                    <label for="password">
+                        <i class="bi bi-lock"></i> 密码
+                    </label>
+                </div>
+
+                <div class="form-check remember-me">
+                    <input class="form-check-input" type="checkbox" id="rememberMe" th:field="*{rememberMe}">
+                    <label class="form-check-label" for="rememberMe">
+                        记住我
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-login">
+                    <i class="bi bi-box-arrow-in-right"></i> 登录
+                </button>
+            </form>
+
+            <div class="text-center mt-4">
+                <p class="text-muted">
+                    <small>默认账号: admin/123456 (管理员) | user1/123456 (用户)</small>
+                </p>
+                <p>
+                    <a href="/user/register" class="text-decoration-none">
+                        <i class="bi bi-person-plus"></i> 还没有账号？立即注册
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <p class="text-muted">
+                © 2023 云图书管理系统 | 登录页面
+            </p>
+        </div>
+    </div>
+
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+
+</html>

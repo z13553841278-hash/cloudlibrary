@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjq.java_ee_starter.mapper.UserMapper">
+    <!-- 在XML顶部定义，可被多个查询引用 -->
+    <resultMap id="userResultMap" type="User">
+        <id property="id" column="id" />
+        <result property="userName" column="user_name" />
+        <result property="password" column="password" />
+        <result property="email" column="email" /><!-- 数据库列名 email_address -> 对象属性 email -->
+        <result property="phone" column="phone" />
+        <result property="status" column="status" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <!-- 定义查询列，避免写SELECT * 和重复的字段列表 -->
+    <sql id="userBaseColumns"> id, user_name, password, email, phone, status </sql>
+
+    <select id="selectUsersXml" parameterType="User" resultMap="userResultMap"><!--
+        使用resultMap替代resultType --> SELECT <include
+            refid="userBaseColumns" /><!-- 包含SQL片段 --> FROM users <where>
+            <if test="userName != null and userName != ''"> AND user_name = #{userName} </if>
+            <if
+                test="email != null"> AND email = #{email} </if>
+            <if test="phone != null"> AND phone
+        = #{phone} </if>
+
+        </where>
+    </select>
+
+    <update id="updateUserbyIdXml"> UPDATE users <set>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="password != null">password
+        = #{password},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="phone != null">phone
+        = #{phone},</if>
+        </set> WHERE id = #{id} </update>
+
+    <!-- 定义安全的排序方向SQL片段 -->
+    <sql id="sortOrderDirection">
+        <choose>
+            <when test="sortOrder == 'ASC'">ASC</when>
+            <otherwise>DESC</otherwise>
+        </choose>
+    </sql>
+    <select id="selectUserswithOrderXml" resultMap="userResultMap"> SELECT * FROM users ORDER BY <choose>
+            <when test="orderby == 'userName'"> user_name <include refid="sortOrderDirection" />
+            </when>
+            <when test="orderby == 'email'"> email <include refid="sortOrderDirection" />
+            </when>
+            <otherwise>id DESC</otherwise>
+        </choose>
+    </select>
+
+    <select id="selectUsersByEmailListXml" resultMap="userResultMap"> SELECT * FROM users WHERE
+        email IN <foreach item="email" collection="emailList" open="(" separator="," close=")">
+        #{email} </foreach> ORDER BY user_name </select>
+
+    <insert id="batchInsertUsersXml" parameterType="User"
+        useGeneratedKeys="true" keyProperty="id"> INSERT INTO users (user_name, password, email,
+        phone) VALUES <foreach item="user" collection="userList" separator=","> (#{user.userName},
+        #{user.password}, #{user.email}, #{user.phone}) </foreach>
+    </insert>
+
+    <update id="batchUpdateUsersXml">
+        <foreach item="updateMap" collection="updateList" separator=";"> UPDATE users <set>
+                <!-- 使用白名单机制确保字段安全 -->
+                <if
+                    test="updateMap.containsKey('userName')"> user_name = #{updateMap.userName}, </if>
+                <if
+                    test="updateMap.containsKey('email')"> email = #{updateMap.email}, </if>
+                <if
+                    test="updateMap.containsKey('password')"> password = #{updateMap.password}, </if>
+                 <if
+                    test="updateMap.containsKey('phone')"> phone = #{updateMap.phone}, </if>
+                <!-- 添加其他允许更新的字段 -->
+        updated_at = NOW() </set> WHERE id = #{updateMap.id} </foreach>
+    </update>
+
+</mapper>

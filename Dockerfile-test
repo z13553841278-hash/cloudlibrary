@@ -1,0 +1,9 @@
+# 构建阶段：使用Maven编译
+FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/maven:3.8.5-openjdk-17 AS builder
+COPY settings.xml /usr/share/maven/conf/settings.xml
+WORKDIR /build
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+
+CMD ["mvn", "test"]

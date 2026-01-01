@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjq.java_ee_starter.mapper.BorrowRecordMapper">
+    <resultMap id="borrowRecordResultMap" type="BorrowRecord">
+        <id property="id" column="id" />
+        <result property="userId" column="user_id" />
+        <result property="bookId" column="book_id" />
+        <result property="borrowDate" column="borrow_date" />
+        <result property="dueDate" column="due_date" />
+        <result property="returnDate" column="return_date" />
+        <result property="status" column="status" />
+        <association property="user" column="user_id"
+            select="com.zjq.java_ee_starter.mapper.UserMapper.findUserbyId" />
+        <association property="book" column="book_id"
+            select="com.zjq.java_ee_starter.mapper.BookMapper.findBookById" />
+    </resultMap>
+
+    <resultMap id="borrowRecordWithNamesResultMap" type="BorrowRecord"
+        extends="borrowRecordResultMap">
+        <association property="user" javaType="User">
+            <id property="id" column="user_id" />
+            <result property="userName" column="user_name" />
+        </association>
+        <association property="book" javaType="Book">
+            <id property="id" column="book_id" />
+            <result property="title" column="title" />
+            <result property="author" column="author" />
+        </association>
+    </resultMap>
+</mapper>

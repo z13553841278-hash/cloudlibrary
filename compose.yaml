@@ -1,0 +1,48 @@
+services:
+  app:
+    build:
+      context: .
+      network: host
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/user_management?useSSL=false&allowPublicKeyRetrieval=true"
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "secret"
+    networks:
+      - app-network
+
+  mysql:
+    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/mysql:8.0
+    command: 
+      - --default-authentication-plugin=caching_sha2_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --host-cache-size=0
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: user_management
+      MYSQL_DEFAULT_AUTHENTICATION_PLUGIN: caching_sha2_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql:/docker-entrypoint-initdb.d  # 初始化脚本
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-psecret"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql-data:

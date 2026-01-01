@@ -1,0 +1,14 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile-test
+      network: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - DOCKER_HOST=tcp://host.docker.internal:2375
+      - TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal
+      - TESTCONTAINERS_REUSE_ENABLE=true

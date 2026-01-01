@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+    <title>系统错误</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .error-container {
+            max-width: 600px;
+            margin: 80px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .error-icon {
+            font-size: 80px;
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+        .error-code {
+            font-size: 24px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 10px;
+        }
+        .error-message {
+            color: #6c757d;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        .error-details {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 25px;
+            text-align: left;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        .btn-home {
+            padding: 10px 30px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-icon">⚠️</div>
+        
+        <h1 class="error-code">系统错误</h1>
+        
+        <p class="error-message">
+            抱歉，系统在处理您的请求时遇到了问题。
+            <span th:if="${exception != null}" th:text="'原因：' + ${exceptionMessage}"></span>
+        </p>
+        
+        <!-- 错误详情（默认折叠，可展开） -->
+        <div class="accordion" id="errorDetails" th:if="${exception != null}">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" 
+                            data-bs-toggle="collapse" data-bs-target="#collapseDetails">
+                        查看错误详情
+                    </button>
+                </h2>
+                <div id="collapseDetails" class="accordion-collapse collapse" 
+                     data-bs-parent="#errorDetails">
+                    <div class="accordion-body error-details">
+                        <div><strong>请求URL:</strong> <span th:text="${url}">-</span></div>
+                        <div><strong>异常类型:</strong> <span th:text="${exceptionType}">-</span></div>
+                        <div><strong>异常信息:</strong> <span th:text="${exceptionMessage}">-</span></div>
+                        <!-- 堆栈信息（开发环境显示） -->
+                        <div th:if="${#strings.contains(exception.toString(), 'Exception')}" 
+                             style="margin-top: 15px; font-family: monospace; font-size: 12px;">
+                            <strong>堆栈跟踪:</strong>
+                            <div style="max-height: 200px; overflow-y: auto; padding: 10px; 
+                                      background-color: #f1f1f1; border-radius: 4px; margin-top: 8px;">
+                                <span th:utext="${#strings.replace(#strings.escapeXml(exception.toString()), 
+                                  'at ', '<br>   at ')}">
+                                    -
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 操作按钮 -->
+        <div class="mt-4">
+            <a href="/" class="btn btn-primary btn-home me-2">
+                返回首页
+            </a>
+            <button onclick="window.history.back()" class="btn btn-outline-secondary btn-home">
+                返回上一页
+            </button>
+        </div>
+        
+        <!-- 技术支持信息 -->
+        <div class="mt-4 pt-3 border-top">
+            <small class="text-muted">
+                如需帮助，请联系系统管理员或技术支持。
+                <br>
+                <span th:text="${@environment.getProperty('app.name', '用户管理系统')}">用户管理系统</span>
+            </small>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // 自动收起错误详情（如果页面有错误参数）
+        document.addEventListener('DOMContentLoaded', function() {
+            // 如果是开发环境，自动展开错误详情
+            const isDevelopment = window.location.hostname === 'localhost' || 
+                                 window.location.hostname === '127.0.0.1';
+            if (isDevelopment) {
+                const errorDetails = document.getElementById('collapseDetails');
+                if (errorDetails) {
+                    const bsCollapse = new bootstrap.Collapse(errorDetails, { toggle: false });
+                    bsCollapse.show();
+                }
+            }
+            
+            // 添加页面加载动画
+            const container = document.querySelector('.error-container');
+            if (container) {
+                container.style.opacity = '0';
+                container.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    container.style.transition = 'all 0.5s ease';
+                    container.style.opacity = '1';
+                    container.style.transform = 'translateY(0)';
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>

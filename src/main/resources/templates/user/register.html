@@ -1,0 +1,158 @@
+<!-- templates/user/register.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+    <title>云图书管理系统 - 注册</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-icons.css}">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .register-container {
+            max-width: 500px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .register-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .register-header h2 {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .register-header p {
+            color: #666;
+        }
+
+        .form-floating {
+            margin-bottom: 15px;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 10px;
+            font-weight: 600;
+        }
+
+        .alert {
+            margin-top: 20px;
+        }
+
+        .role-selection {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="register-container">
+        <div class="register-card">
+            <div class="register-header">
+                <h2><i class="bi bi-person-plus"></i> 用户注册</h2>
+                <p>创建您的云图书管理系统账号</p>
+            </div>
+
+            <!-- 错误提示 -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <!-- 注册表单 -->
+            <form th:action="@{/user/register}" method="post" th:object="${userDTO}">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="userName" th:field="*{userName}" placeholder="请输入用户名"
+                        required>
+                    <label for="userName">
+                        <i class="bi bi-person"></i> 用户名
+                    </label>
+                </div>
+
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="请输入密码"
+                        required>
+                    <label for="password">
+                        <i class="bi bi-lock"></i> 密码
+                    </label>
+                </div>
+
+                <div class="form-floating">
+                    <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="请输入邮箱"
+                        required>
+                    <label for="email">
+                        <i class="bi bi-envelope"></i> 邮箱
+                    </label>
+                </div>
+
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="phone" th:field="*{phone}" placeholder="请输入手机号"
+                        required>
+                    <label for="phone">
+                        <i class="bi bi-phone"></i> 手机号
+                    </label>
+                </div>
+
+                <div class="role-selection">
+                    <label class="form-label">
+                        <i class="bi bi-person-badge"></i> 注册身份
+                    </label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="role" id="userRole" value="0" checked>
+                        <label class="form-check-label" for="userRole">
+                            <i class="bi bi-person"></i> 普通用户
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="role" id="adminRole" value="1">
+                        <label class="form-check-label" for="adminRole">
+                            <i class="bi bi-shield-check"></i> 管理员
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-register">
+                    <i class="bi bi-person-plus"></i> 注册账号
+                </button>
+            </form>
+
+            <div class="text-center mt-4">
+                <p>
+                    <a href="/user/login" class="text-decoration-none">
+                        <i class="bi bi-arrow-left"></i> 返回登录
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <p class="text-muted">
+                © 2023 云图书管理系统 | 注册页面
+            </p>
+        </div>
+    </div>
+
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+
+</html>
