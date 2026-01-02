@@ -1,0 +1,80 @@
+@startuml
+' 设置类样式（圆形C标识）
+skinparam class {
+    BackgroundColor #F0F0F0
+    BorderColor #666666
+    ArrowColor #333333
+    stereotypeCBackgroundColor #FFFFFF
+    stereotypeCBorderColor #00CC66
+    stereotypeCFontColor #000000
+}
+
+' 定义类
+class LoginView  {
+    o form: Object
+    o login(): void
+    o logout(): void
+}
+
+class RegisterView  {
+    o form: Object
+    o rules: Object
+    o register(): void
+    o validateCode(): void
+}
+
+class UserController {
+    o registerUser(): Result
+    o login(User): Result
+    o logout(): Result
+}
+
+class User  {
+    o id: Long
+    o username: String
+    o password: String
+    o role: Integer
+    o getters/setters
+}
+
+class UserService {
+    o register(User): boolean
+    o login(String, String): User
+    o logout(): void
+}
+
+class Result {
+    o code: String
+    o msg: String
+    o data: Object
+    o success(): Result
+    o error(): Result
+}
+
+class UserMapper  {
+    o insert(User): int
+    o selectByUsername(String): User
+}
+
+
+' 绘制关系与标注
+' LoginView -> UserController
+LoginView -- UserController : 调用login/logout接口
+' RegisterView -> UserController
+RegisterView -- UserController : 调用register接口
+' UserController -> UserService
+UserController -- UserService : 调用业务方法
+' UserService -> UserMapper
+UserService -- UserMapper : 数据库操作
+' UserMapper -> User
+UserMapper -- User : 映射
+' UserService -> User
+UserService -- User : 操作实体
+' UserController -> Result
+UserController -- Result : 返回结果
+' LoginView -> Result
+LoginView -- Result : 处理响应
+' RegisterView -> Result
+RegisterView -- Result : 处理响应
+
+@endumls

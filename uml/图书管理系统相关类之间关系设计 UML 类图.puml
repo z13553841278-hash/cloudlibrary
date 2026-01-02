@@ -1,0 +1,95 @@
+@startuml
+' 设置样式（和图片匹配）
+skinparam class {
+    BackgroundColor #F0F0F0
+    BorderColor #666666
+    ArrowColor #333333
+}
+skinparam rectangle {
+    BackgroundColor #FFFFFF
+    BorderColor #999999
+}
+
+
+' 定义所有类
+class BookView {
+    + search:String
+    + searchBtn:String
+    + searchId:String
+    + load():void
+    + search():void
+    + clear():void
+}
+
+class BookController {
+    + getBookList():Result
+    + searchBook():Result
+    + borrowBook():Result
+    + returnBook():Result
+}
+
+class BookService {
+}
+
+class BookMapper {
+    + selectPage():Page<Book>
+    + selectById():Book
+    + updateById():int
+}
+
+class Book {
+    + id:Long
+    + name:String
+    + author:String
+    + publisher:String
+    + stock:Integer
+    + getters/setters
+}
+
+class BorrowRecordView {
+    + loadRecord():void
+    + returnBook():void
+}
+
+class BookWithUserController {
+    + insertNewBookWithUser():Result
+    + updateBookWithUser():Result
+    + deleteRecordBookWithUser():Result
+    + findPage():Result
+}
+
+class BookWithUserMapper {
+    + insertBookWithUser():int
+    + updateBookWithUser():int
+    + deleteBookWithUser():int
+    + selectPage():Page<BookWithUser>
+}
+
+class BookWithUser {
+    + id:Long
+    + bookId:Long
+    + borrowTime:Date
+    + returnDate:Date
+    + getters/setters
+}
+
+class User {
+    + id:Long
+    + username:String
+    + role:Integer
+    + getters/setters
+}
+
+
+' 绘制关系与标注
+BookView -- BookController : 调用接口
+BookController -- BookService : 调用业务方法
+BookService -- BookMapper : 数据库操作
+BookMapper -- Book : 操作实体
+BorrowRecordView -- BookWithUserController : 调用接口
+BookWithUserController -- BookWithUserMapper : 数据库操作
+BookWithUserMapper -- BookWithUser : 操作实体
+User -- BookWithUser : 借阅
+Book -- BookWithUser : 被借阅
+
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+actor 用户
+participant "注册控制器" as RegController
+participant "注册服务" as RegService
+participant "用户DAO" as UserDao
+participant "用户实体" as User
+
+用户 -> RegController: 提交注册信息(用户名,密码,邮箱)
+RegController -> User: 创建用户对象
+RegController -> RegService: 调用register(user)
+RegService -> RegService: 验证用户信息合法性
+RegService -> UserDao: 调用findByUsername(username)
+UserDao --> RegService: 返回查询结果(用户是否存在)
+alt 用户名已存在
+    RegService --> RegController: 返回注册失败
+else 用户名可用
+    RegService -> UserDao: 调用save(user)
+    UserDao --> RegService: 返回保存结果
+    RegService --> RegController: 返回注册成功
+end
+RegController --> 用户: 显示注册结果
+@enduml

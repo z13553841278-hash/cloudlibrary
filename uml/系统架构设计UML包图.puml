@@ -1,0 +1,65 @@
+@startuml
+' 设置包样式
+skinparam package {
+    BackgroundColor #F5F5F5
+    BorderColor #666666
+    ArrowColor #333333
+}
+skinparam rectangle {
+    BackgroundColor #FFFFFF
+    BorderColor #999999
+}
+
+
+' 前端层（Vue）包
+package "前端层(Vue)" {
+    rectangle "工具类(Utils)" as Utils
+    rectangle "视图组件(Views)" as Views
+    rectangle "路由(Router)" as Router
+    rectangle "状态管理(Vuex)" as Vuex
+}
+
+' 后端层（Spring Boot）包
+package "后端层(Spring Boot)" {
+    ' 控制层
+    rectangle "控制层(Controller)" {
+        rectangle "请求处理" as RequestHandle
+    }
+
+    ' 服务层
+    rectangle "服务层(Service)" {
+        rectangle "业务逻辑处理" as BizHandle
+    }
+
+    ' 数据访问层
+    rectangle "数据访问层(Mapper)" {
+        rectangle "数据库操作" as DbOperate
+    }
+
+    ' 实体层
+    rectangle "实体层(Entity)" {
+        rectangle "数据模型定义" as ModelDef
+    }
+
+    ' 公共组件
+    rectangle "公共组件(Common)" {
+        rectangle "结果封装" as ResultWrap
+        rectangle "异常处理" as ExceptionHandle
+        rectangle "配置类" as ConfigClass
+    }
+}
+
+
+' 绘制包内关系（去掉<<关联>>）
+Views -- Router
+Views -- Vuex
+Utils -- Router : (虚线)
+' 后端内部关系
+RequestHandle -- BizHandle
+BizHandle -- DbOperate
+DbOperate -- ModelDef
+BizHandle -- ResultWrap
+' 前后端关联
+Router -- RequestHandle
+
+@enduml
