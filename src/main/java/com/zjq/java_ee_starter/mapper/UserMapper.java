@@ -36,7 +36,7 @@ public interface UserMapper {
                 )
             """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    Long insertUser(User user);
+    int insertUser(User user);
 
     // 根据ID查询用户
     @Select("select * from users where id = #{id}")

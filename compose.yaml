@@ -10,7 +10,8 @@ services:
       mysql:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/book_management?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&useUnicode=true&autoReconnect=true&serverTimezone=Asia/Shanghai"
+      # ✅ 强化JDBC连接编码参数，完全适配utf8mb4，杜绝应用层乱码
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/book_management?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&useUnicode=true&autoReconnect=true&serverTimezone=Asia/Shanghai&connectionCollation=utf8mb4_unicode_ci"
       SPRING_DATASOURCE_USERNAME: "root"
       SPRING_DATASOURCE_PASSWORD: "secret"
     networks:
@@ -22,16 +23,20 @@ services:
       - --default-authentication-plugin=caching_sha2_password
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
+      - --init-connect=SET NAMES utf8mb4
+      - --skip-character-set-client-handshake
       - --host-cache-size=0
     environment:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: book_management
       MYSQL_DEFAULT_AUTHENTICATION_PLUGIN: caching_sha2_password
+      # ✅ 新增：强制容器内部会话默认编码为utf8mb4
+      LANG: C.UTF-8
     ports:
       - "3307:3306"
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./mysql:/docker-entrypoint-initdb.d  # 初始化脚本
+      - ./mysql:/docker-entrypoint-initdb.d  # 初始化脚本挂载目录
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-psecret"]
       interval: 5s

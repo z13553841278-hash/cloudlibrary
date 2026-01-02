@@ -118,13 +118,13 @@
                         <i class="bi bi-person-badge"></i> 注册身份
                     </label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="role" id="userRole" value="0" checked>
+                        <input class="form-check-input" type="radio" th:field="*{role}" id="userRole" value="0" checked>
                         <label class="form-check-label" for="userRole">
                             <i class="bi bi-person"></i> 普通用户
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="role" id="adminRole" value="1">
+                        <input class="form-check-input" type="radio" th:field="*{role}" id="adminRole" value="1">
                         <label class="form-check-label" for="adminRole">
                             <i class="bi bi-shield-check"></i> 管理员
                         </label>

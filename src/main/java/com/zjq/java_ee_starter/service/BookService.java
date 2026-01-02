@@ -4,9 +4,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import com.zjq.java_ee_starter.mapper.BookMapper;
 import com.zjq.java_ee_starter.entity.Book;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class BookService {
+    private static final Logger logger = LoggerFactory.getLogger(BookService.class);
     private final BookMapper bookMapper;
 
     public BookService(BookMapper bookMapper) {
@@ -14,7 +17,11 @@ public class BookService {
     }
 
     public List<Book> findAllBooks() {
-        return bookMapper.findAllBooks();
+        List<Book> books = bookMapper.findAllBooks();
+        for (Book book : books) {
+            logger.debug("Book title: {}, bytes: {}", book.getTitle(), book.getTitle().getBytes());
+        }
+        return books;
     }
 
     public List<Book> findAvailableBooks() {
@@ -30,7 +37,11 @@ public class BookService {
     }
 
     public List<Book> findBooksByCondition(Book book) {
-        return bookMapper.findBooksByCondition(book);
+        List<Book> books = bookMapper.findBooksByCondition(book);
+        for (Book b : books) {
+            logger.debug("Book title: {}, bytes: {}", b.getTitle(), b.getTitle().getBytes());
+        }
+        return books;
     }
 
     public boolean saveBook(Book book) {

@@ -24,14 +24,19 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         HttpSession session = request.getSession();
         String requestURI = request.getRequestURI();
+        String method = request.getMethod();
+
+        System.out.println("=== 拦截器检查请求: " + method + " " + requestURI + " ===");
 
         // 允许通过的路径（登录页面、登录请求、静态资源等）
         if (requestURI.equals("/") ||
                 requestURI.equals("/user/login") ||
                 requestURI.equals("/user/logout") ||
+                requestURI.equals("/user/register") || // 添加注册路径
                 requestURI.startsWith("/css/") ||
                 requestURI.startsWith("/js/") ||
                 requestURI.startsWith("/images/")) {
+            System.out.println("允许通过: " + requestURI);
             return true;
         }
 

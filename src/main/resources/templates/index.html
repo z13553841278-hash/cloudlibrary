@@ -59,6 +59,9 @@
                     <li class="nav-item" th:if="${session.role == 1}">
                         <a class="nav-link" href="/borrow/manage"><i class="bi bi-list-check"></i> 借阅管理</a>
                     </li>
+                    <li class="nav-item" th:if="${session.role == 1}">
+                        <a class="nav-link" href="/user/manage"><i class="bi bi-people"></i> 用户管理</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown" th:if="${session.userName != null}">
@@ -123,7 +126,7 @@
 
             <!-- 管理员功能 -->
             <div class="row" th:if="${session.role == 1}">
-                <div class="col-md-6 mb-4">
+                <div class="col-md-4 mb-4">
                     <div class="card h-100 text-center">
                         <div class="card-body">
                             <div class="feature-icon text-warning"><i class="bi bi-gear"></i></div>
@@ -133,13 +136,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 mb-4">
+                <div class="col-md-4 mb-4">
                     <div class="card h-100 text-center">
                         <div class="card-body">
                             <div class="feature-icon text-secondary"><i class="bi bi-list-check"></i></div>
                             <h5 class="card-title">借阅管理</h5>
                             <p class="card-text">管理所有借阅记录，处理归还和逾期情况</p>
                             <a th:href="@{/borrow/manage}" class="btn btn-secondary">借阅管理</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <div class="feature-icon text-info"><i class="bi bi-people"></i></div>
+                            <h5 class="card-title">用户管理</h5>
+                            <p class="card-text">管理系统用户账号，维护用户信息</p>
+                            <a th:href="@{/user/manage}" class="btn btn-info">用户管理</a>
                         </div>
                     </div>
                 </div>

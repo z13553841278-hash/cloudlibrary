@@ -89,11 +89,17 @@ public class LoginController {
      */
     @PostMapping("/user/register")
     public String processRegister(@ModelAttribute UserDTO userDto, Model model) {
+        System.out.println("=== 开始处理注册请求 ===");
+        System.out.println("用户名: " + userDto.getUserName());
+        System.out.println("邮箱: " + userDto.getEmail());
         try {
             userService.register(userDto);
+            System.out.println("注册成功");
             model.addAttribute("success", "注册成功，请登录");
             return "redirect:/user/login";
         } catch (Exception e) {
+            System.out.println("注册失败: " + e.getMessage());
+            e.printStackTrace();
             model.addAttribute("error", e.getMessage());
             model.addAttribute("userDTO", userDto);
             return "user/register";
